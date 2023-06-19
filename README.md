@@ -1,18 +1,73 @@
-# Vue 3 + TypeScript + Vite
+# Authentication for larasense/static-site-generation application using Vue3 and Pinia
 
-This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+[static-site-generation](https://github.com/larasense/static-site-generation) is a Laravel Package for generate static sites using a command or a middleware on visit.
 
-## Recommended IDE Setup
+It is meant to be used on a Breeze or Jetstream with the InertiaJs stack, and provide a simple and quick way to generate and consume static content.
 
-- [VS Code](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+But it come with a cabeat. the site generated with no credentials and for that reason authentication need to be handeled difffernly on the Front side.
 
-## Type Support For `.vue` Imports in TS
+## Instalation
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin) to make the TypeScript language service aware of `.vue` types.
+```bash
+npm i @larasense/ssg-auth-vue
+```
 
-If the standalone TypeScript plugin doesn't feel fast enough to you, Volar has also implemented a [Take Over Mode](https://github.com/johnsoncodehk/volar/discussions/471#discussioncomment-1361669) that is more performant. You can enable it by the following steps:
+## Configuration
 
-1. Disable the built-in TypeScript Extension
-   1. Run `Extensions: Show Built-in Extensions` from VSCode's command palette
-   2. Find `TypeScript and JavaScript Language Features`, right click and select `Disable (Workspace)`
-2. Reload the VSCode window by running `Developer: Reload Window` from the command palette.
+TBD
+
+## How to use
+
+### Backend
+
+on `app/Http/Middleware/HandleInertiaRequests.php` or wherever the share props is set, call the getUserInfo() from the StaticSite Facade to replace the auth prop.
+
+```php
+// app/Http/Middleware/HandleInertiaRequests.php
+    /**
+     * Define the props that are shared by default.
+     *
+     * @return array<string, mixed>
+     */
+    public function share(Request $request): array
+    {
+        return array_merge(parent::share($request), [
+            // ....
+            'auth' => StaticSite::getUserInfo(),
+        ]);
+    }
+
+```
+
+### Frontend
+
+On every page or component that need to access the user
+
+```vue
+<script setup>
+import { useAuth } from "@larasense/ssg-auth-vue";
+const props = defineProps({
+  // ...
+  auth: Object,
+});
+const auth = useAuth();
+auth.setPropUser(props.auth.user);
+</script>
+```
+
+and then replace `$page.props.auth.user` for `auth.user`
+
+```html
+<Link v-if="auth.user" :href="route('dashboard')"
+    class="">
+Dashboard</Link>
+
+<template v-else>
+    <Link :href="route('login')"
+        class="">
+    Log in</Link>
+    <Link v-if="canRegister" :href="route('register')"
+        class="">
+    Register</Link>
+</template>
+```
