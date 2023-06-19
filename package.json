@@ -1,0 +1,39 @@
+{
+  "name": "@larasense/ssg-auth-vue",
+  "version": "0.0.4",
+  "type": "module",
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/ssg-auth-vue-ts.umd.js",
+  "module": "./dist/ssg-auth-vue-ts.es.js",
+  "exports": {
+    ".": {
+      "import": "./dist/ssg-auth-vue-ts.es.js",
+      "require": "./dist/ssg-auth-vue-ts.umd.js"
+    },
+    "./dist/ssg-auth-vue-ts.css": {
+      "import": "./dist/ssg-auth-vue-ts.css",
+      "require": "./dist/ssg-auth-vue-ts.css"
+    }
+  },
+  "types": "./dist/main.d.ts",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "pinia": "^2.1.4",
+    "vue": "^3.2.47"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^4.1.0",
+    "path": "^0.12.7",
+    "rollup-plugin-typescript2": "^0.34.1",
+    "typescript": "^5.0.2",
+    "vite": "^4.3.9",
+    "vite-plugin-dts": "^2.3.0",
+    "vue-tsc": "^1.4.2"
+  }
+}
