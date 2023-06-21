@@ -1,6 +1,6 @@
 {
   "name": "@larasense/ssg-auth-vue",
-  "version": "0.0.5",
+  "version": "0.0.7",
   "type": "module",
   "files": [
     "dist"
@@ -28,6 +28,7 @@
     "vue": "^3.2.47"
   },
   "devDependencies": {
+    "@types/node": "^20.3.1",
     "@vitejs/plugin-vue": "^4.1.0",
     "path": "^0.12.7",
     "rollup-plugin-typescript2": "^0.34.1",

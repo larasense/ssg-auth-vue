@@ -10,6 +10,12 @@ type User = {
   email: string;
 };
 
+const envRevalidation = parseInt(
+  process.env.MIX_SSG_AUTH_REVALIDATION || "",
+  10
+);
+const TIMEOUT = Number.isInteger(envRevalidation) ? envRevalidation : 5 * 3600;
+
 export default defineStore("auth", () => {
   const user = ref<User | null>(null);
   const updated_at = ref<Date | null>(null);
@@ -22,7 +28,7 @@ export default defineStore("auth", () => {
   function delay(ms: number) {
     return new Promise((resolve) => {
       clearTimeout(timer.value);
-      timer.value = setTimeout(resolve, ms);
+      timer.value = window.setTimeout(resolve, ms);
     });
   }
 
@@ -32,10 +38,10 @@ export default defineStore("auth", () => {
    * the last change.
    */
   function setPropUser(propUser: UserProp) {
-    console.log(propUser, user.value);
     if (updated_at.value == propUser.updated_at) {
       return;
     }
+    console.log(propUser, user.value, TIMEOUT);
 
     const getUserInfo = () =>
       fetch(propUser.userInfo)
@@ -43,7 +49,8 @@ export default defineStore("auth", () => {
         .then((data: User | null) => {
           console.log(data);
           user.value = data;
-          delay(5000).then(getUserInfo);
+          updated_at.value = propUser.updated_at;
+          delay(TIMEOUT).then(getUserInfo);
         });
     getUserInfo();
   }
