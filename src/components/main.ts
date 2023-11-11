@@ -1,10 +1,13 @@
 import type { App } from "vue";
-import { HelloWorld, useAuth } from "@/components";
+import { useAuth } from "@/components";
+import { createPinia } from "pinia";
+
+const pinia = createPinia();
 
 export default {
   install: (app: App) => {
-    app.component("HelloWorld", HelloWorld);
+    app.use(pinia);
   },
 };
 
-export { HelloWorld, useAuth };
+export { useAuth };

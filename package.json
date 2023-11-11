@@ -1,6 +1,6 @@
 {
   "name": "@larasense/ssg-auth-vue",
-  "version": "0.0.7",
+  "version": "0.0.9",
   "type": "module",
   "files": [
     "dist"
@@ -11,10 +11,6 @@
     ".": {
       "import": "./dist/ssg-auth-vue-ts.es.js",
       "require": "./dist/ssg-auth-vue-ts.umd.js"
-    },
-    "./dist/ssg-auth-vue-ts.css": {
-      "import": "./dist/ssg-auth-vue-ts.css",
-      "require": "./dist/ssg-auth-vue-ts.css"
     }
   },
   "types": "./dist/main.d.ts",

@@ -11,15 +11,18 @@ type User = {
 };
 
 const envRevalidation = parseInt(
-  process.env.MIX_SSG_AUTH_REVALIDATION || "",
+  import.meta.env?.VITE_SSG_AUTH_REVALIDATION || "",
   10
 );
-const TIMEOUT = Number.isInteger(envRevalidation) ? envRevalidation : 5 * 3600;
+
+const TIMEOUT = Number.isInteger(envRevalidation) ? envRevalidation : 5 * 60000;
 
 export default defineStore("auth", () => {
   const user = ref<User | null>(null);
   const updated_at = ref<Date | null>(null);
   const timer = ref<number | undefined>(undefined);
+
+  console.log("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX", TIMEOUT);
 
   function logout() {
     user.value = null;
@@ -41,15 +44,14 @@ export default defineStore("auth", () => {
     if (updated_at.value == propUser.updated_at) {
       return;
     }
+    console.log("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX", TIMEOUT);
     console.log(propUser, user.value, TIMEOUT);
 
     const getUserInfo = () =>
       fetch(propUser.userInfo)
         .then((response) => response.json())
         .then((data: User | null) => {
-          console.log(data);
           user.value = data;
-          updated_at.value = propUser.updated_at;
           delay(TIMEOUT).then(getUserInfo);
         });
     getUserInfo();
